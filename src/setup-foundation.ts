@@ -50,6 +50,7 @@ export async function setupFoundation(): Promise<void> {
   logger.info("Fixing package.json scripts...");
   await exec("npm pkg delete scripts.lint");
   await exec("npm pkg delete scripts.format");
+  await exec('npm pkg set scripts.typecheck="tsc --noEmit"');
   await exec('npm pkg set scripts.doctor="ultracite doctor"');
 
   logger.info("Updating AGENTS.md...");
