@@ -14,5 +14,12 @@ export async function setupAiElements(): Promise<void> {
   biome.files.includes.push("!components/ai-elements");
   await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
 
+  logger.info("Excluding components/ai-elements from TypeScript...");
+  const tsconfigRaw = await readTextFile("tsconfig.json");
+  const tsconfig = JSON.parse(tsconfigRaw);
+  tsconfig.exclude ??= [];
+  tsconfig.exclude.push("components/ai-elements");
+  await writeTextFile("tsconfig.json", `${JSON.stringify(tsconfig, null, 2)}\n`);
+
   logger.success("AI Elements setup complete.");
 }

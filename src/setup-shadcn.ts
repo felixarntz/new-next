@@ -18,6 +18,13 @@ export async function setupShadcn(): Promise<void> {
   biome.files.includes.push("!lib/utils.ts", "!components/ui");
   await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
 
+  logger.info("Excluding components/ui from TypeScript...");
+  const tsconfigRaw = await readTextFile("tsconfig.json");
+  const tsconfig = JSON.parse(tsconfigRaw);
+  tsconfig.exclude ??= [];
+  tsconfig.exclude.push("components/ui");
+  await writeTextFile("tsconfig.json", `${JSON.stringify(tsconfig, null, 2)}\n`);
+
   logger.info("Updating AGENTS.md for shadcn...");
   let agentsMd = await readTextFile("AGENTS.md");
   agentsMd = prependBeforeUltraciteHeader({
