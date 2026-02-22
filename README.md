@@ -13,8 +13,10 @@ CLI tool to initialize an opinionated Next.js project with Bun and Ultracite. Op
 ## Usage
 
 ```bash
-npx new-next [options]
+npx new-next [directory] [options]
 ```
+
+By default, this will set up the new Next.js project in the current directory. Optionally pass a `directory` path to set up the project there instead.
 
 ### Options
 
