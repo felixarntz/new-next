@@ -4,9 +4,10 @@ import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
 import { exec } from "./utils/exec.js";
 
 export async function setupAiSdk(): Promise<void> {
-  logger.info("Setting up AI SDK...");
+  logger.info("Setting up AI SDK and its agent skill...");
 
   await exec("bun add ai @ai-sdk/react zod");
+  await exec("bunx skills add vercel/ai --skill ai-sdk -y -a claude-code");
 
   logger.info("Updating AGENTS.md for AI SDK...");
   let agentsMd = await readTextFile("AGENTS.md");
