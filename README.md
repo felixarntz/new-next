@@ -6,7 +6,7 @@ CLI tool to initialize a modern, opinionated [Next.js](https://nextjs.org) proje
 
 - **Next.js + Bun + Tailwind CSS** — Fast dev server, builds, and package management out of the box
 - **Ultracite + Biome** — Zero-config linting, formatting, and pre-commit hooks via Husky
-- **Agent-ready** — AGENTS.md with coding guidelines, auto-formatting hooks, and workflow commands
+- **Agent-ready** — `AGENTS.md` with coding guidelines, auto-formatting hooks, and workflow commands
 - **GitHub CI** — Built-in workflow for linting, type checking, and build verification
 - **Optional AI stack** — shadcn components, Vercel AI SDK, and AI Elements optionally installed via flags
 

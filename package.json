@@ -1,6 +1,6 @@
 {
   "name": "new-next",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "CLI tool to initialize a modern, opinionated Next.js project with Bun and Ultracite. Optionally install shadcn UI, AI SDK, and AI Elements.",
   "type": "module",
   "bin": {
@@ -30,6 +30,10 @@
     "ultracite": "7.2.3"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/felixarntz/new-next.git"
+  },
   "peerDependencies": {
     "typescript": "^5"
   }
