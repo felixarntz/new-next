@@ -19,7 +19,10 @@ export async function setupAiElements(): Promise<void> {
   const tsconfig = JSON.parse(tsconfigRaw);
   tsconfig.exclude ??= [];
   tsconfig.exclude.push("components/ai-elements");
-  await writeTextFile("tsconfig.json", `${JSON.stringify(tsconfig, null, 2)}\n`);
+  await writeTextFile(
+    "tsconfig.json",
+    `${JSON.stringify(tsconfig, null, 2)}\n`
+  );
 
   logger.success("AI Elements setup complete.");
 }
