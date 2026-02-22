@@ -1,6 +1,6 @@
 # new-next
 
-CLI tool to initialize a modern, opinionated Next.js project with Bun and Ultracite. Optionally install shadcn, AI SDK, and AI Elements.
+CLI tool to initialize a modern, opinionated [Next.js](https://nextjs.org) project with [Bun](https://bun.com) and [Ultracite](https://www.ultracite.ai). Optionally install [shadcn UI](https://ui.shadcn.com), [AI SDK](https://ai-sdk.dev), and [AI Elements](https://elements.ai-sdk.dev).
 
 ## What You Get
 
