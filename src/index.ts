@@ -37,7 +37,12 @@ withOptions(program, [
     const opt = getOpt(handlerArgs);
     const args = getArgs(handlerArgs);
 
-    if (args[0]) {
+    if (
+      typeof args[0] === "string" &&
+      args[0] !== "." &&
+      // TODO: `getArgs` returns a string "undefined" for missing positional args, which is not ideal.
+      args[0] !== "undefined"
+    ) {
       const projectDir = resolve(args[0]);
       process.chdir(projectDir);
     }
