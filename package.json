@@ -1,0 +1,27 @@
+{
+  "name": "new-next",
+  "version": "0.1.0",
+  "description": "CLI tool to initialize opinionated Next.js projects with Bun, Ultracite, and optional shadcn, AI SDK, and AI Elements support",
+  "type": "module",
+  "bin": {
+    "new-next": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node --format esm",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@commander-js/extra-typings": "^13.0.0",
+    "@felixarntz/cli-utils": "^0.1.1",
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
