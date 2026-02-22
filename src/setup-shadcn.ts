@@ -1,7 +1,7 @@
 import { logger, readTextFile, writeTextFile } from "@felixarntz/cli-utils";
-import { exec } from "./utils/exec.js";
-import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
 import { getShadcnGuidelinesContent } from "./assets/shadcn-guidelines.js";
+import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
+import { exec } from "./utils/exec.js";
 
 export async function setupShadcn(): Promise<void> {
   logger.info("Setting up shadcn...");
@@ -16,7 +16,7 @@ export async function setupShadcn(): Promise<void> {
   biome.files ??= {};
   biome.files.includes ??= [];
   biome.files.includes.push("!lib/utils.ts", "!components/ui");
-  await writeTextFile("biome.json", JSON.stringify(biome, null, 2) + "\n");
+  await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
 
   logger.info("Updating AGENTS.md for shadcn...");
   let agentsMd = await readTextFile("AGENTS.md");

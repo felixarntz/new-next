@@ -8,8 +8,11 @@ export function exec(command: string): Promise<void> {
       cwd: process.cwd(),
     });
     child.on("close", (code) => {
-      if (code === 0) resolve();
-      else reject(new Error(`Command failed with exit code ${code}: ${command}`));
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Command failed with exit code ${code}: ${command}`));
+      }
     });
     child.on("error", reject);
   });

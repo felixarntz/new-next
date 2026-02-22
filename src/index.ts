@@ -3,17 +3,17 @@
 import { resolve } from "node:path";
 import { program } from "@commander-js/extra-typings";
 import {
-  withOptions,
-  withErrorHandling,
-  getOpt,
   getArgs,
+  getOpt,
   logger,
+  withErrorHandling,
+  withOptions,
 } from "@felixarntz/cli-utils";
+import { cleanup } from "./cleanup.js";
+import { setupAiElements } from "./setup-ai-elements.js";
+import { setupAiSdk } from "./setup-ai-sdk.js";
 import { setupFoundation } from "./setup-foundation.js";
 import { setupShadcn } from "./setup-shadcn.js";
-import { setupAiSdk } from "./setup-ai-sdk.js";
-import { setupAiElements } from "./setup-ai-elements.js";
-import { cleanup } from "./cleanup.js";
 
 program
   .name("new-next")

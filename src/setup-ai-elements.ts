@@ -12,7 +12,7 @@ export async function setupAiElements(): Promise<void> {
   biome.files ??= {};
   biome.files.includes ??= [];
   biome.files.includes.push("!components/ai-elements");
-  await writeTextFile("biome.json", JSON.stringify(biome, null, 2) + "\n");
+  await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
 
   logger.success("AI Elements setup complete.");
 }

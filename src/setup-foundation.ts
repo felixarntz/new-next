@@ -1,17 +1,17 @@
-import { rename, symlink, rm, stat } from "node:fs/promises";
+import { rename, rm, stat, symlink } from "node:fs/promises";
 import {
+  fileExists,
   logger,
   readTextFile,
   writeTextFile,
-  fileExists,
 } from "@felixarntz/cli-utils";
-import { exec } from "./utils/exec.js";
+import { getWorkflowCommandsContent } from "./assets/workflow-commands.js";
 import {
+  prependBeforeUltraciteHeader,
   removeQuickReferenceSection,
   replaceUltraciteFixCommand,
-  prependBeforeUltraciteHeader,
 } from "./utils/agents-md.js";
-import { getWorkflowCommandsContent } from "./assets/workflow-commands.js";
+import { exec } from "./utils/exec.js";
 
 export async function setupFoundation(): Promise<void> {
   logger.info("Setting up foundation...");

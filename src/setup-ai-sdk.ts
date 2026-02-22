@@ -1,7 +1,7 @@
 import { logger, readTextFile, writeTextFile } from "@felixarntz/cli-utils";
-import { exec } from "./utils/exec.js";
-import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
 import { getAiSdkGuidelinesContent } from "./assets/ai-sdk-guidelines.js";
+import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
+import { exec } from "./utils/exec.js";
 
 export async function setupAiSdk(): Promise<void> {
   logger.info("Setting up AI SDK...");

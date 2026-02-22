@@ -1,9 +1,13 @@
+const QUICK_REFERENCE_RE = /^## Quick Reference\n[\s\S]*?^---\n\n?/m;
+const ULTRACITE_FIX_RE = /bun x ultracite fix/g;
+const ULTRACITE_HEADER_RE = /^# Ultracite Code Standards$/m;
+
 export function removeQuickReferenceSection(content: string): string {
-  return content.replace(/^## Quick Reference\n[\s\S]*?^---\n\n?/m, "");
+  return content.replace(QUICK_REFERENCE_RE, "");
 }
 
 export function replaceUltraciteFixCommand(content: string): string {
-  return content.replace(/bun x ultracite fix/g, "bun fix");
+  return content.replace(ULTRACITE_FIX_RE, "bun fix");
 }
 
 export function prependBeforeUltraciteHeader(opts: {
@@ -11,7 +15,7 @@ export function prependBeforeUltraciteHeader(opts: {
   prepend: string;
 }): string {
   return opts.content.replace(
-    /^# Ultracite Code Standards$/m,
+    ULTRACITE_HEADER_RE,
     `${opts.prepend}\n# Ultracite Code Standards`
   );
 }
