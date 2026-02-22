@@ -21,3 +21,7 @@ bun install
 bun run src/index.ts --help
 bun run build
 ```
+
+## License
+
+Licensed under the MIT License.

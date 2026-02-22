@@ -29,6 +29,7 @@
     "husky": "^9.1.7",
     "ultracite": "7.2.3"
   },
+  "license": "MIT",
   "peerDependencies": {
     "typescript": "^5"
   }
