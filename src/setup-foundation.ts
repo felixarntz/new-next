@@ -24,6 +24,10 @@ export async function setupFoundation(): Promise<void> {
   );
 
   logger.info("Configuring AGENTS.md...");
+  if (await fileExists("CLAUDE.md")) {
+    // Next.js may scaffold this as "@AGENTS.md", but we don't want that.
+    await unlink("CLAUDE.md");
+  }
   const ultraciteMd = await readTextFile(".claude/CLAUDE.md");
   if (await fileExists("AGENTS.md")) {
     let existingAgentsMd = await readTextFile("AGENTS.md");
