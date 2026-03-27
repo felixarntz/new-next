@@ -1,6 +1,6 @@
 {
   "name": "new-next",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "CLI tool to initialize a modern, opinionated Next.js project with Bun and Ultracite. Optionally install shadcn UI, AI SDK, and AI Elements.",
   "type": "module",
   "bin": {

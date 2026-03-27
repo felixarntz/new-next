@@ -1,4 +1,4 @@
-import { rename, rm, stat, symlink } from "node:fs/promises";
+import { rm, stat, symlink, unlink } from "node:fs/promises";
 import {
   fileExists,
   logger,
@@ -24,8 +24,16 @@ export async function setupFoundation(): Promise<void> {
   );
 
   logger.info("Configuring AGENTS.md...");
-  await rename(".claude/CLAUDE.md", "AGENTS.md");
+  const ultraciteMd = await readTextFile(".claude/CLAUDE.md");
+  if (await fileExists("AGENTS.md")) {
+    let existingAgentsMd = await readTextFile("AGENTS.md");
+    existingAgentsMd = `${existingAgentsMd.trimEnd()}\n\n${ultraciteMd}`;
+    await writeTextFile("AGENTS.md", existingAgentsMd);
+  } else {
+    await writeTextFile("AGENTS.md", ultraciteMd);
+  }
   await symlink("AGENTS.md", "CLAUDE.md");
+  await unlink(".claude/CLAUDE.md");
 
   logger.info("Fixing pre-commit setup...");
   const huskyDirPath = ".husky/_";
