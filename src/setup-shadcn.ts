@@ -7,7 +7,7 @@ export async function setupShadcn(): Promise<void> {
   logger.info("Setting up shadcn...");
 
   await exec(
-    "bunx --bun shadcn@latest init --template next --base-color neutral --yes"
+    "bunx --bun shadcn@latest init --template next --base radix --preset nova --no-monorepo --yes"
   );
 
   logger.info("Updating biome.json for shadcn...");
