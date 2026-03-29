@@ -23,6 +23,14 @@ export async function setupFoundation(): Promise<void> {
     "npx ultracite init --pm bun --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky"
   );
 
+  logger.info("Excluding .claude from Biome...");
+  const biomeRaw = await readTextFile("biome.json");
+  const biome = JSON.parse(biomeRaw);
+  biome.files ??= {};
+  biome.files.includes ??= [];
+  biome.files.includes.push("!.claude");
+  await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
+
   logger.info("Configuring AGENTS.md...");
   if (await fileExists("CLAUDE.md")) {
     // Next.js may scaffold this as "@AGENTS.md", but we don't want that.
