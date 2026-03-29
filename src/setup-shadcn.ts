@@ -9,6 +9,7 @@ export async function setupShadcn(): Promise<void> {
   await exec(
     "bunx --bun shadcn@latest init --template next --base radix --preset nova --no-monorepo --yes"
   );
+  await exec("bunx skills add shadcn/ui --skill shadcn -y -a claude-code");
 
   logger.info("Updating biome.json for shadcn...");
   const biomeRaw = await readTextFile("biome.json");

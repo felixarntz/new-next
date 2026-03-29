@@ -5,6 +5,9 @@ export async function setupAiElements(): Promise<void> {
   logger.info("Setting up AI Elements...");
 
   await exec("bunx --bun shadcn@latest add @ai-elements/all");
+  await exec(
+    "bunx skills add vercel/ai-elements --skill ai-elements -y -a claude-code"
+  );
 
   logger.info("Updating biome.json for AI Elements...");
   const biomeRaw = await readTextFile("biome.json");
