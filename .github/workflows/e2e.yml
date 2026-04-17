@@ -7,7 +7,7 @@ on:
     - cron: "17 */6 * * *"
 
 jobs:
-  scaffold:
+  test-scaffold:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
           bun install
           bun run build
 
-      - name: Scaffold project
+      - name: Test scaffolding project
         run: |
           mkdir test-project && cd test-project
           git init
