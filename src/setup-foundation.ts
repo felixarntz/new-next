@@ -6,13 +6,13 @@ import {
   writeTextFile,
 } from "@felixarntz/cli-utils";
 import { getWorkflowCommandsContent } from "./assets/workflow-commands.js";
+import type { SetupOptions } from "./types.js";
 import {
   prependBeforeUltraciteHeader,
   removeQuickReferenceSection,
   replaceUltraciteFixCommand,
 } from "./utils/agents-md.js";
 import { exec } from "./utils/exec.js";
-import type { PackageManagerOptions } from "./utils/package-manager.js";
 import { getPackageManagerConfig } from "./utils/package-manager.js";
 
 interface PackageJson {
@@ -40,10 +40,9 @@ async function updatePackageJsonScripts(): Promise<void> {
   );
 }
 
-export async function setupFoundation(
-  opts: PackageManagerOptions
-): Promise<void> {
+export async function setupFoundation(opts: SetupOptions): Promise<void> {
   const packageManager = getPackageManagerConfig(opts);
+  const ultraciteSkillFlag = opts.skipSkills ? "--quiet" : "--install-skill";
 
   logger.info("Setting up foundation...");
 
@@ -51,7 +50,7 @@ export async function setupFoundation(
     `npx create-next-app . --ts --app --tailwind ${packageManager.createNextAppFlag} --biome --yes`
   );
   await exec(
-    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky --install-skill`
+    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
   );
 
   logger.info("Excluding .claude from Biome...");

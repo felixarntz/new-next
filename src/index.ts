@@ -37,12 +37,17 @@ withOptions(program, [
     argname: "--ai-elements",
     description: "Include AI Elements (requires --shadcn)",
   },
+  {
+    argname: "--skip-skills",
+    description: "Skip installing reusable agent skills",
+  },
 ]).action(
   withErrorHandling(async (...handlerArgs) => {
     const opt = getOpt(handlerArgs);
     const args = getArgs(handlerArgs);
     const packageManager: ProjectPackageManager =
       opt.bun === true ? "bun" : "pnpm";
+    const skipSkills = opt.skipSkills === true;
 
     if (
       typeof args[0] === "string" &&
@@ -58,18 +63,18 @@ withOptions(program, [
       throw new Error("--ai-elements requires --shadcn");
     }
 
-    await setupFoundation({ packageManager });
+    await setupFoundation({ packageManager, skipSkills });
 
     if (opt.shadcn) {
-      await setupShadcn({ packageManager });
+      await setupShadcn({ packageManager, skipSkills });
     }
 
     if (opt.aiSdk) {
-      await setupAiSdk({ packageManager });
+      await setupAiSdk({ packageManager, skipSkills });
     }
 
     if (opt.aiElements) {
-      await setupAiElements({ packageManager });
+      await setupAiElements({ packageManager, skipSkills });
     }
 
     await cleanup({ packageManager });

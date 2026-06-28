@@ -1,11 +1,11 @@
 import { logger, readTextFile, writeTextFile } from "@felixarntz/cli-utils";
 import { getShadcnGuidelinesContent } from "./assets/shadcn-guidelines.js";
+import type { SetupOptions } from "./types.js";
 import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
 import { exec } from "./utils/exec.js";
-import type { PackageManagerOptions } from "./utils/package-manager.js";
 import { getPackageManagerConfig } from "./utils/package-manager.js";
 
-export async function setupShadcn(opts: PackageManagerOptions): Promise<void> {
+export async function setupShadcn(opts: SetupOptions): Promise<void> {
   const packageManager = getPackageManagerConfig(opts);
 
   logger.info("Setting up shadcn...");
@@ -13,9 +13,11 @@ export async function setupShadcn(opts: PackageManagerOptions): Promise<void> {
   await exec(
     `${packageManager.shadcnCommand} init --template next --base radix --preset nova --no-monorepo --yes`
   );
-  await exec(
-    `${packageManager.skillsCommand} add shadcn/ui --skill shadcn -y -a claude-code`
-  );
+  if (!opts.skipSkills) {
+    await exec(
+      `${packageManager.skillsCommand} add shadcn/ui --skill shadcn -y -a claude-code`
+    );
+  }
 
   logger.info("Updating biome.json for shadcn...");
   const biomeRaw = await readTextFile("biome.json");

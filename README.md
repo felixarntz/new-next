@@ -24,6 +24,7 @@ By default, this will set up the new Next.js project in the current directory us
 - `--shadcn` — Include shadcn components
 - `--ai-sdk` — Include AI SDK
 - `--ai-elements` — Include AI Elements (requires `--shadcn`)
+- `--skip-skills` — Skip installing reusable agent skills
 
 ## Development
 

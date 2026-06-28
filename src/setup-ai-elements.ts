@@ -1,19 +1,19 @@
 import { logger, readTextFile, writeTextFile } from "@felixarntz/cli-utils";
+import type { SetupOptions } from "./types.js";
 import { exec } from "./utils/exec.js";
-import type { PackageManagerOptions } from "./utils/package-manager.js";
 import { getPackageManagerConfig } from "./utils/package-manager.js";
 
-export async function setupAiElements(
-  opts: PackageManagerOptions
-): Promise<void> {
+export async function setupAiElements(opts: SetupOptions): Promise<void> {
   const packageManager = getPackageManagerConfig(opts);
 
   logger.info("Setting up AI Elements...");
 
   await exec(`${packageManager.shadcnCommand} add @ai-elements/all`);
-  await exec(
-    `${packageManager.skillsCommand} add vercel/ai-elements --skill ai-elements -y -a claude-code`
-  );
+  if (!opts.skipSkills) {
+    await exec(
+      `${packageManager.skillsCommand} add vercel/ai-elements --skill ai-elements -y -a claude-code`
+    );
+  }
 
   logger.info("Updating biome.json for AI Elements...");
   const biomeRaw = await readTextFile("biome.json");
