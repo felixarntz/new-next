@@ -53,6 +53,12 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
   );
 
+  if (await fileExists(".claude/settings.json")) {
+    logger.info("Configuring Codex hooks...");
+    const hooksJson = await readTextFile(".claude/settings.json");
+    await writeTextFile(".codex/hooks.json", hooksJson);
+  }
+
   logger.info("Excluding .claude from Biome...");
   const biomeRaw = await readTextFile("biome.json");
   const biome = JSON.parse(biomeRaw);
