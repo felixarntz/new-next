@@ -3,6 +3,9 @@
   "version": "0.3.1",
   "description": "CLI tool to initialize a modern, opinionated Next.js project with PNPM or Bun and Ultracite. Optionally install shadcn UI, AI SDK, and AI Elements.",
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "bin": {
     "new-next": "dist/index.js"
   },
@@ -19,15 +22,16 @@
     "doctor": "ultracite doctor"
   },
   "dependencies": {
-    "@commander-js/extra-typings": "^13.0.0",
-    "@felixarntz/cli-utils": "^0.1.1",
-    "commander": "^13.0.0"
+    "@commander-js/extra-typings": "^15.0.0",
+    "@felixarntz/cli-utils": "^0.1.2",
+    "commander": "^15.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.0",
-    "@types/bun": "latest",
+    "@biomejs/biome": "2.5.1",
+    "@types/bun": "^1.3.14",
+    "@types/node": "^26.0.1",
     "husky": "^9.1.7",
-    "ultracite": "7.2.3"
+    "ultracite": "7.8.3"
   },
   "license": "MIT",
   "repository": {
@@ -35,6 +39,6 @@
     "url": "https://github.com/felixarntz/new-next.git"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   }
 }
