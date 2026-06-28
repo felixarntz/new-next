@@ -8,6 +8,7 @@ import {
 import { getWorkflowCommandsContent } from "./assets/workflow-commands.js";
 import type { SetupOptions } from "./types.js";
 import {
+  condenseUltraciteCodeStandardsSection,
   prependBeforeUltraciteHeader,
   removeQuickReferenceSection,
   replaceUltraciteFixCommand,
@@ -109,6 +110,7 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
   logger.info("Updating AGENTS.md...");
   let agentsMd = await readTextFile("AGENTS.md");
   agentsMd = removeQuickReferenceSection(agentsMd);
+  agentsMd = condenseUltraciteCodeStandardsSection(agentsMd);
   agentsMd = replaceUltraciteFixCommand({
     content: agentsMd,
     fixCommand: packageManager.fixCommand,
