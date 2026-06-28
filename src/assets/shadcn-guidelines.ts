@@ -1,21 +1,28 @@
-export function getShadcnGuidelinesContent(): string {
+import type { PackageManagerOptions } from "../utils/package-manager.js";
+import { getPackageManagerConfig } from "../utils/package-manager.js";
+
+export function getShadcnGuidelinesContent(
+  opts: PackageManagerOptions
+): string {
+  const { shadcnCommand } = getPackageManagerConfig(opts);
+
   return `# shadcn Guidelines
 
 This project uses shadcn components.
 
-To add a new component, use \`pnpm dlx shadcn@latest add <component>\`. Example:
+To add a new component, use \`${shadcnCommand} add <component>\`. Example:
 \`\`\`bash
-bunx --bun shadcn@latest add button
+${shadcnCommand} add button
 \`\`\`
 
 To search for available components in the shadcn registry, use:
 \`\`\`bash
-bunx --bun shadcn@latest search @shadcn
+${shadcnCommand} search @shadcn
 \`\`\`
 
 You can optionally provide a \`-q\` parameter with a search query:
 \`\`\`bash
-bunx --bun shadcn@latest search @shadcn -q "button"
+${shadcnCommand} search @shadcn -q "button"
 \`\`\`
 `;
 }

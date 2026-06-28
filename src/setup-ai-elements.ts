@@ -1,12 +1,18 @@
 import { logger, readTextFile, writeTextFile } from "@felixarntz/cli-utils";
 import { exec } from "./utils/exec.js";
+import type { PackageManagerOptions } from "./utils/package-manager.js";
+import { getPackageManagerConfig } from "./utils/package-manager.js";
 
-export async function setupAiElements(): Promise<void> {
+export async function setupAiElements(
+  opts: PackageManagerOptions
+): Promise<void> {
+  const packageManager = getPackageManagerConfig(opts);
+
   logger.info("Setting up AI Elements...");
 
-  await exec("bunx --bun shadcn@latest add @ai-elements/all");
+  await exec(`${packageManager.shadcnCommand} add @ai-elements/all`);
   await exec(
-    "bunx skills add vercel/ai-elements --skill ai-elements -y -a claude-code"
+    `${packageManager.skillsCommand} add vercel/ai-elements --skill ai-elements -y -a claude-code`
   );
 
   logger.info("Updating biome.json for AI Elements...");

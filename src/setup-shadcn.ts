@@ -2,14 +2,20 @@ import { logger, readTextFile, writeTextFile } from "@felixarntz/cli-utils";
 import { getShadcnGuidelinesContent } from "./assets/shadcn-guidelines.js";
 import { prependBeforeUltraciteHeader } from "./utils/agents-md.js";
 import { exec } from "./utils/exec.js";
+import type { PackageManagerOptions } from "./utils/package-manager.js";
+import { getPackageManagerConfig } from "./utils/package-manager.js";
 
-export async function setupShadcn(): Promise<void> {
+export async function setupShadcn(opts: PackageManagerOptions): Promise<void> {
+  const packageManager = getPackageManagerConfig(opts);
+
   logger.info("Setting up shadcn...");
 
   await exec(
-    "bunx --bun shadcn@latest init --template next --base radix --preset nova --no-monorepo --yes"
+    `${packageManager.shadcnCommand} init --template next --base radix --preset nova --no-monorepo --yes`
   );
-  await exec("bunx skills add shadcn/ui --skill shadcn -y -a claude-code");
+  await exec(
+    `${packageManager.skillsCommand} add shadcn/ui --skill shadcn -y -a claude-code`
+  );
 
   logger.info("Updating biome.json for shadcn...");
   const biomeRaw = await readTextFile("biome.json");
@@ -33,7 +39,7 @@ export async function setupShadcn(): Promise<void> {
   let agentsMd = await readTextFile("AGENTS.md");
   agentsMd = prependBeforeUltraciteHeader({
     content: agentsMd,
-    prepend: getShadcnGuidelinesContent(),
+    prepend: getShadcnGuidelinesContent(opts),
   });
   await writeTextFile("AGENTS.md", agentsMd);
 

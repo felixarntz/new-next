@@ -14,6 +14,7 @@ import { setupAiElements } from "./setup-ai-elements.js";
 import { setupAiSdk } from "./setup-ai-sdk.js";
 import { setupFoundation } from "./setup-foundation.js";
 import { setupShadcn } from "./setup-shadcn.js";
+import type { ProjectPackageManager } from "./utils/package-manager.js";
 
 program
   .name("new-next")
@@ -26,6 +27,10 @@ withOptions(program, [
     description: "Target directory for the new project",
     positional: true,
   },
+  {
+    argname: "--bun",
+    description: "Use Bun instead of PNPM for the scaffolded project",
+  },
   { argname: "--shadcn", description: "Include shadcn components" },
   { argname: "--ai-sdk", description: "Include AI SDK" },
   {
@@ -36,6 +41,8 @@ withOptions(program, [
   withErrorHandling(async (...handlerArgs) => {
     const opt = getOpt(handlerArgs);
     const args = getArgs(handlerArgs);
+    const packageManager: ProjectPackageManager =
+      opt.bun === true ? "bun" : "pnpm";
 
     if (
       typeof args[0] === "string" &&
@@ -51,21 +58,21 @@ withOptions(program, [
       throw new Error("--ai-elements requires --shadcn");
     }
 
-    await setupFoundation();
+    await setupFoundation({ packageManager });
 
     if (opt.shadcn) {
-      await setupShadcn();
+      await setupShadcn({ packageManager });
     }
 
     if (opt.aiSdk) {
-      await setupAiSdk();
+      await setupAiSdk({ packageManager });
     }
 
     if (opt.aiElements) {
-      await setupAiElements();
+      await setupAiElements({ packageManager });
     }
 
-    await cleanup();
+    await cleanup({ packageManager });
 
     logger.success("Project initialized successfully!");
   })

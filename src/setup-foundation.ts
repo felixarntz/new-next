@@ -12,15 +12,46 @@ import {
   replaceUltraciteFixCommand,
 } from "./utils/agents-md.js";
 import { exec } from "./utils/exec.js";
+import type { PackageManagerOptions } from "./utils/package-manager.js";
+import { getPackageManagerConfig } from "./utils/package-manager.js";
 
-export async function setupFoundation(): Promise<void> {
+interface PackageJson {
+  scripts?: Record<string, string>;
+}
+
+async function updatePackageJsonScripts(): Promise<void> {
+  const packageJsonRaw = await readTextFile("package.json");
+  const packageJson = JSON.parse(packageJsonRaw) as PackageJson;
+  const scripts = Object.fromEntries(
+    Object.entries(packageJson.scripts ?? {}).filter(
+      ([scriptName]) => scriptName !== "lint" && scriptName !== "format"
+    )
+  );
+
+  packageJson.scripts = {
+    ...scripts,
+    doctor: "ultracite doctor",
+    typecheck: "tsc --noEmit",
+  };
+
+  await writeTextFile(
+    "package.json",
+    `${JSON.stringify(packageJson, null, 2)}\n`
+  );
+}
+
+export async function setupFoundation(
+  opts: PackageManagerOptions
+): Promise<void> {
+  const packageManager = getPackageManagerConfig(opts);
+
   logger.info("Setting up foundation...");
 
   await exec(
-    "npx create-next-app . --ts --app --tailwind --use-bun --biome --yes"
+    `npx create-next-app . --ts --app --tailwind ${packageManager.createNextAppFlag} --biome --yes`
   );
   await exec(
-    "npx ultracite init --pm bun --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky"
+    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky`
   );
 
   logger.info("Excluding .claude from Biome...");
@@ -68,18 +99,18 @@ export async function setupFoundation(): Promise<void> {
   }
 
   logger.info("Fixing package.json scripts...");
-  await exec("npm pkg delete scripts.lint");
-  await exec("npm pkg delete scripts.format");
-  await exec('npm pkg set scripts.typecheck="tsc --noEmit"');
-  await exec('npm pkg set scripts.doctor="ultracite doctor"');
+  await updatePackageJsonScripts();
 
   logger.info("Updating AGENTS.md...");
   let agentsMd = await readTextFile("AGENTS.md");
   agentsMd = removeQuickReferenceSection(agentsMd);
-  agentsMd = replaceUltraciteFixCommand(agentsMd);
+  agentsMd = replaceUltraciteFixCommand({
+    content: agentsMd,
+    fixCommand: packageManager.fixCommand,
+  });
   agentsMd = prependBeforeUltraciteHeader({
     content: agentsMd,
-    prepend: getWorkflowCommandsContent(),
+    prepend: getWorkflowCommandsContent(opts),
   });
   await writeTextFile("AGENTS.md", agentsMd);
 
