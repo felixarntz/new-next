@@ -3,6 +3,7 @@ export type ProjectPackageManager = "pnpm" | "bun";
 export interface PackageManagerConfig {
   addCommand: string;
   createNextAppFlag: string;
+  devAddCommand: string;
   fixCommand: string;
   name: ProjectPackageManager;
   shadcnCommand: string;
@@ -29,6 +30,7 @@ const packageManagerConfigs = {
   pnpm: {
     addCommand: "pnpm add",
     createNextAppFlag: "--use-pnpm",
+    devAddCommand: "pnpm add -D",
     fixCommand: "pnpm fix",
     name: "pnpm",
     shadcnCommand: "pnpm dlx shadcn@latest",
@@ -49,6 +51,7 @@ const packageManagerConfigs = {
   bun: {
     addCommand: "bun add",
     createNextAppFlag: "--use-bun",
+    devAddCommand: "bun add -d",
     fixCommand: "bun fix",
     name: "bun",
     shadcnCommand: "bunx --bun shadcn@latest",

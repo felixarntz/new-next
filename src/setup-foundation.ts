@@ -20,6 +20,26 @@ interface PackageJson {
   scripts?: Record<string, string>;
 }
 
+interface BiomeConfig {
+  plugins?: string[];
+}
+
+interface TsConfig {
+  compilerOptions?: {
+    types?: string[];
+  };
+}
+
+const FELIXARNTZ_BIOME_PLUGIN_PATH =
+  "./node_modules/@felixarntz/biome/rules/all.grit";
+const FELIXARNTZ_BIOME_TYPES = "@felixarntz/biome/object-hasown";
+
+function pushUnique(opts: { items: string[]; value: string }): void {
+  if (!opts.items.includes(opts.value)) {
+    opts.items.push(opts.value);
+  }
+}
+
 async function updatePackageJsonScripts(): Promise<void> {
   const packageJsonRaw = await readTextFile("package.json");
   const packageJson = JSON.parse(packageJsonRaw) as PackageJson;
@@ -41,6 +61,32 @@ async function updatePackageJsonScripts(): Promise<void> {
   await writeTextFile(
     "package.json",
     `${JSON.stringify(packageJson, null, 2)}\n`
+  );
+}
+
+async function updateBiomeConfigPlugins(): Promise<void> {
+  const biomeRaw = await readTextFile("biome.json");
+  const biome = JSON.parse(biomeRaw) as BiomeConfig;
+  biome.plugins ??= [];
+  pushUnique({
+    items: biome.plugins,
+    value: FELIXARNTZ_BIOME_PLUGIN_PATH,
+  });
+  await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
+}
+
+async function updateTsConfigTypes(): Promise<void> {
+  const tsconfigRaw = await readTextFile("tsconfig.json");
+  const tsconfig = JSON.parse(tsconfigRaw) as TsConfig;
+  tsconfig.compilerOptions ??= {};
+  tsconfig.compilerOptions.types ??= [];
+  pushUnique({
+    items: tsconfig.compilerOptions.types,
+    value: FELIXARNTZ_BIOME_TYPES,
+  });
+  await writeTextFile(
+    "tsconfig.json",
+    `${JSON.stringify(tsconfig, null, 2)}\n`
   );
 }
 
@@ -123,6 +169,13 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     prepend: getWorkflowCommandsContent(opts),
   });
   await writeTextFile("AGENTS.md", agentsMd);
+
+  logger.info("Installing @felixarntz/biome...");
+  await exec(`${packageManager.devAddCommand} @felixarntz/biome`);
+
+  logger.info("Configuring @felixarntz/biome...");
+  await updateBiomeConfigPlugins();
+  await updateTsConfigTypes();
 
   logger.success("Foundation setup complete.");
 }
