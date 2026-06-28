@@ -51,7 +51,7 @@ export async function setupFoundation(
     `npx create-next-app . --ts --app --tailwind ${packageManager.createNextAppFlag} --biome --yes`
   );
   await exec(
-    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky`
+    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky --install-skill`
   );
 
   logger.info("Excluding .claude from Biome...");
