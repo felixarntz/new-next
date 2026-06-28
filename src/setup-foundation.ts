@@ -23,11 +23,14 @@ interface PackageJson {
 async function updatePackageJsonScripts(): Promise<void> {
   const packageJsonRaw = await readTextFile("package.json");
   const packageJson = JSON.parse(packageJsonRaw) as PackageJson;
-  const scripts = Object.fromEntries(
-    Object.entries(packageJson.scripts ?? {}).filter(
-      ([scriptName]) => scriptName !== "lint" && scriptName !== "format"
-    )
-  );
+  const scripts = Object.create(null) as Record<string, string>;
+  for (const [scriptName, script] of Object.entries(
+    packageJson.scripts ?? {}
+  )) {
+    if (scriptName !== "lint" && scriptName !== "format") {
+      scripts[scriptName] = script;
+    }
+  }
 
   packageJson.scripts = {
     ...scripts,

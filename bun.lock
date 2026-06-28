@@ -11,6 +11,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.1",
+        "@felixarntz/biome": "^0.2.0",
         "@types/bun": "^1.3.14",
         "@types/node": "^26.0.1",
         "husky": "^9.1.7",
@@ -45,6 +46,8 @@
     "@clack/prompts": ["@clack/prompts@1.6.0", "", { "dependencies": { "@clack/core": "1.4.2", "fast-string-width": "^3.0.2", "fast-wrap-ansi": "^0.2.0", "sisteransi": "^1.0.5" } }, "sha512-EYlRokl8szrP9Z25qT5aepMdBjzBvHF9ZEhzIiUBc9guz/T31EqRgvD0QSgZcpE93xiwrr+OkB4nz0BZyF6fSA=="],
 
     "@commander-js/extra-typings": ["@commander-js/extra-typings@15.0.0", "", { "peerDependencies": { "commander": "~15.0.0" } }, "sha512-yeJlba62xqmkgELUsn7356MEnzLLu/fw2x4lofFqGnXh6YysRdEs2BaLeLtg1+KU0AXvMeqQvTTp+3hBEBK+EA=="],
+
+    "@felixarntz/biome": ["@felixarntz/biome@0.2.0", "", {}, "sha512-af/2XLBXlv/omR2QwNaXLWB+AggbWnM00mimhfxBqgaahd7arZCsSrwbLV5pzcCuMM2OSqIB9wxEk/YNojdqzA=="],
 
     "@felixarntz/cli-utils": ["@felixarntz/cli-utils@0.1.2", "", { "dependencies": { "@inquirer/prompts": "^7.10.1" }, "peerDependencies": { "@commander-js/extra-typings": "^15.0.0", "commander": "^15.0.0" } }, "sha512-6rJTT6KS0ZTywvfU/1B0Tfw7+VAgFM595P4X18+uXln7hyaClu7SF9cfPXFChFDuweY7dlCELFYWXWdtcjmcig=="],
 

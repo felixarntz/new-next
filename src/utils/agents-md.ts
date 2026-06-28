@@ -9,9 +9,14 @@ export function removeQuickReferenceSection(content: string): string {
   return content.replace(QUICK_REFERENCE_RE, "");
 }
 
-function findNextTopLevelHeader(content: string, startIndex: number): number {
-  const match = TOP_LEVEL_HEADER_RE.exec(content.slice(startIndex));
-  return match?.index === undefined ? content.length : startIndex + match.index;
+function findNextTopLevelHeader(opts: {
+  content: string;
+  startIndex: number;
+}): number {
+  const match = TOP_LEVEL_HEADER_RE.exec(opts.content.slice(opts.startIndex));
+  return match?.index === undefined
+    ? opts.content.length
+    : opts.startIndex + match.index;
 }
 
 function getMarkdownBlocks(content: string): string[] {
@@ -34,7 +39,10 @@ export function condenseUltraciteCodeStandardsSection(content: string): string {
 
   const sectionStart = headerMatch.index;
   const sectionBodyStart = sectionStart + headerMatch[0].length;
-  const sectionEnd = findNextTopLevelHeader(content, sectionBodyStart);
+  const sectionEnd = findNextTopLevelHeader({
+    content,
+    startIndex: sectionBodyStart,
+  });
   const sectionBody = content.slice(sectionBodyStart, sectionEnd);
   const firstParagraph = getMarkdownBlocks(sectionBody).find(isParagraphBlock);
   const lastBody = sectionBody.split(HORIZONTAL_RULE_RE).at(-1) ?? sectionBody;
