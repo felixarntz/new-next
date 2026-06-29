@@ -2,8 +2,6 @@
 
 CLI tool to initialize a modern, opinionated [Next.js](https://nextjs.org) project, with [PNPM](https://pnpm.io) or [Bun](https://bun.com), and [Ultracite](https://www.ultracite.ai). Optionally install [shadcn UI](https://ui.shadcn.com), [AI SDK](https://ai-sdk.dev), and [AI Elements](https://elements.ai-sdk.dev).
 
-Test.
-
 ## What You Get
 
 - **Next.js + PNPM or Bun + Tailwind CSS** — Fast dev server, builds, and package management out of the box
