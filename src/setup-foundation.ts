@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { rm, stat, symlink, unlink } from "node:fs/promises";
 import {
   fileExists,
@@ -33,11 +34,67 @@ interface TsConfig {
 const FELIXARNTZ_BIOME_PLUGIN_PATH =
   "./node_modules/@felixarntz/biome/rules/all.grit";
 const FELIXARNTZ_BIOME_TYPES = "@felixarntz/biome/object-hasown";
+const PNPM_BUILD_POLICY_PACKAGES = ["sharp", "unrs-resolver"] as const;
+const PNPM_USER_AGENT_VERSION_RE = /\bpnpm\/(\d+)/;
 
 function pushUnique(opts: { items: string[]; value: string }): void {
   if (!opts.items.includes(opts.value)) {
     opts.items.push(opts.value);
   }
+}
+
+function getPnpmMajorVersion(): number | null {
+  const userAgent = process.env.npm_config_user_agent ?? "";
+  const versionFromUserAgent = userAgent.match(PNPM_USER_AGENT_VERSION_RE)?.[1];
+  if (versionFromUserAgent) {
+    return Number.parseInt(versionFromUserAgent, 10);
+  }
+
+  try {
+    const version = execFileSync("pnpm", ["--version", "--silent"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    const majorVersion = Number.parseInt(version.split(".")[0] ?? "", 10);
+    return Number.isNaN(majorVersion) ? null : majorVersion;
+  } catch {
+    return null;
+  }
+}
+
+function getPnpmBuildPolicyContent(): string | null {
+  const pnpmMajorVersion = getPnpmMajorVersion();
+  if (pnpmMajorVersion !== null && pnpmMajorVersion < 10) {
+    return null;
+  }
+
+  if (pnpmMajorVersion !== null && pnpmMajorVersion < 11) {
+    const ignoredPackages = PNPM_BUILD_POLICY_PACKAGES.map(
+      (packageName) => `  - ${packageName}`
+    );
+    return ["ignoredBuiltDependencies:", ...ignoredPackages, ""].join("\n");
+  }
+
+  const allowedPackages = PNPM_BUILD_POLICY_PACKAGES.map(
+    (packageName) => `  ${packageName}: false`
+  );
+  return ["allowBuilds:", ...allowedPackages, ""].join("\n");
+}
+
+async function configurePnpmBuildPolicy(): Promise<void> {
+  const pnpmBuildPolicyContent = getPnpmBuildPolicyContent();
+  if (!pnpmBuildPolicyContent) {
+    return;
+  }
+
+  if (await fileExists("pnpm-workspace.yaml")) {
+    const existingPnpmWorkspace = await readTextFile("pnpm-workspace.yaml");
+    if (existingPnpmWorkspace === pnpmBuildPolicyContent) {
+      return;
+    }
+  }
+
+  await writeTextFile("pnpm-workspace.yaml", pnpmBuildPolicyContent);
 }
 
 async function updatePackageJsonScripts(): Promise<void> {
@@ -96,9 +153,18 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
 
   logger.info("Setting up foundation...");
 
+  const skipInitialInstall =
+    packageManager.name === "pnpm" ? " --skip-install" : "";
   await exec(
-    `npx create-next-app . --ts --app --tailwind ${packageManager.createNextAppFlag} --biome --yes`
+    `npx create-next-app . --ts --app --tailwind ${packageManager.createNextAppFlag} --biome --yes${skipInitialInstall}`
   );
+  if (packageManager.name === "pnpm") {
+    logger.info("Configuring PNPM build policy...");
+    await configurePnpmBuildPolicy();
+
+    logger.info("Installing PNPM dependencies...");
+    await exec("pnpm install");
+  }
   await exec(
     `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
   );
