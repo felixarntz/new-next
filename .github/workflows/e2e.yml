@@ -28,7 +28,7 @@ jobs:
           bun install
           bun run build
 
-      - name: Test PNPM scaffolding project
+      - name: Scaffold project with PNPM
         run: |
           mkdir test-project-pnpm && cd test-project-pnpm
           git init
@@ -57,7 +57,7 @@ jobs:
           bun install
           bun run build
 
-      - name: Test Bun scaffolding project
+      - name: Scaffold project with Bun
         run: |
           mkdir test-project-bun && cd test-project-bun
           git init
