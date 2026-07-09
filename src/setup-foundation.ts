@@ -22,6 +22,14 @@ interface PackageJson {
 }
 
 interface BiomeConfig {
+  files?: {
+    includes?: string[];
+  };
+  linter?: {
+    rules?: {
+      a11y?: Record<string, unknown>;
+    };
+  };
   plugins?: string[];
 }
 
@@ -166,7 +174,7 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     await exec("pnpm install");
   }
   await exec(
-    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
+    `${packageManager.ultraciteCommand} init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
   );
 
   if (await fileExists(".claude/settings.json")) {
@@ -175,12 +183,16 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     await writeTextFile(".codex/hooks.json", hooksJson);
   }
 
-  logger.info("Excluding .claude from Biome...");
+  logger.info("Configuring Biome...");
   const biomeRaw = await readTextFile("biome.json");
-  const biome = JSON.parse(biomeRaw);
+  const biome = JSON.parse(biomeRaw) as BiomeConfig;
   biome.files ??= {};
   biome.files.includes ??= [];
   biome.files.includes.push("!.claude");
+  biome.linter ??= {};
+  biome.linter.rules ??= {};
+  biome.linter.rules.a11y ??= {};
+  biome.linter.rules.a11y.noSvgWithoutTitle = "warn";
   await writeTextFile("biome.json", `${JSON.stringify(biome, null, 2)}\n`);
 
   logger.info("Configuring AGENTS.md...");
