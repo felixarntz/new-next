@@ -166,7 +166,7 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     await exec("pnpm install");
   }
   await exec(
-    `npx ultracite init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
+    `${packageManager.ultraciteCommand} init --pm ${packageManager.name} --linter biome --frameworks next --editors cursor vscode --agents claude --hooks claude --integrations husky ${ultraciteSkillFlag}`
   );
 
   if (await fileExists(".claude/settings.json")) {

@@ -8,6 +8,7 @@ export interface PackageManagerConfig {
   name: ProjectPackageManager;
   shadcnCommand: string;
   skillsCommand: string;
+  ultraciteCommand: string;
   workflowCommands: {
     build: string;
     check: string;
@@ -35,6 +36,7 @@ const packageManagerConfigs = {
     name: "pnpm",
     shadcnCommand: "pnpm dlx shadcn@latest",
     skillsCommand: "pnpm dlx skills",
+    ultraciteCommand: "pnpm dlx ultracite",
     workflowCommands: {
       build: "pnpm build",
       check: "pnpm check",
@@ -56,6 +58,7 @@ const packageManagerConfigs = {
     name: "bun",
     shadcnCommand: "bunx --bun shadcn@latest",
     skillsCommand: "bunx skills",
+    ultraciteCommand: "bunx --bun ultracite",
     workflowCommands: {
       build: "bun run build",
       check: "bun check",
