@@ -21,6 +21,24 @@ interface PackageJson {
   scripts?: Record<string, string>;
 }
 
+interface HookObject {
+  command: string;
+  type: string;
+}
+
+interface HookEntry {
+  hooks: HookObject[];
+  matcher?: string;
+}
+
+interface HooksConfig {
+  hooks: Record<string, HookEntry[]>;
+}
+
+interface CopilotHooksConfig {
+  hooks: Record<string, HookObject[]>;
+}
+
 interface BiomeConfig {
   files?: {
     includes?: string[];
@@ -179,11 +197,22 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
   );
 
   if (await fileExists(".claude/settings.json")) {
-    logger.info("Configuring Codex and Grok Build hooks...");
+    logger.info("Configuring Codex, Grok Build, and GitHub Copilot hooks...");
     const hooksJson = await readTextFile(".claude/settings.json");
     await writeTextFile(".codex/hooks.json", hooksJson);
     // Grok Build supports topic-specific hook files instead of one global file.
     await writeTextFile(".grok/hooks/ultracite.json", hooksJson);
+
+    // GitHub Copilot uses a simpler hook format without a matcher property.
+    const hooksConfig = JSON.parse(hooksJson) as HooksConfig;
+    const copilotHooks: CopilotHooksConfig = { hooks: {} };
+    for (const [event, hookEntries] of Object.entries(hooksConfig.hooks)) {
+      copilotHooks.hooks[event] = hookEntries.flatMap((entry) => entry.hooks);
+    }
+    await writeTextFile(
+      ".github/hooks/ultracite.json",
+      JSON.stringify(copilotHooks, null, 2)
+    );
   }
 
   logger.info("Configuring Biome...");
