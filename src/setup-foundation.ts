@@ -163,8 +163,9 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
 
   const skipInitialInstall =
     packageManager.name === "pnpm" ? " --skip-install" : "";
+  const tailwindFlag = opts.tailwind === true ? " --tailwind" : "";
   await exec(
-    `${packageManager.createNextAppCommand} . --ts --app --tailwind ${packageManager.createNextAppFlag} --biome --yes${skipInitialInstall}`
+    `${packageManager.createNextAppCommand} . --ts --app${tailwindFlag} ${packageManager.createNextAppFlag} --biome --yes${skipInitialInstall}`
   );
   if (packageManager.name === "pnpm") {
     logger.info("Configuring PNPM build policy...");

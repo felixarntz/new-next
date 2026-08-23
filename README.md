@@ -21,6 +21,7 @@ By default, this will set up the new Next.js project in the current directory us
 ### Options
 
 - `--bun` — Use Bun instead of PNPM for the scaffolded project
+- `--tailwind` — Include Tailwind CSS
 - `--shadcn` — Include shadcn components
 - `--ai-sdk` — Include AI SDK
 - `--ai-elements` — Include AI Elements (requires `--shadcn`)

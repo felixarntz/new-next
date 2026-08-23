@@ -31,6 +31,10 @@ withOptions(program, [
     argname: "--bun",
     description: "Use Bun instead of PNPM for the scaffolded project",
   },
+  {
+    argname: "--tailwind",
+    description: "Include Tailwind CSS",
+  },
   { argname: "--shadcn", description: "Include shadcn components" },
   { argname: "--ai-sdk", description: "Include AI SDK" },
   {
@@ -63,7 +67,10 @@ withOptions(program, [
       throw new Error("--ai-elements requires --shadcn");
     }
 
-    await setupFoundation({ packageManager, skipSkills });
+    // shadcn requires Tailwind CSS, so --shadcn implies Tailwind.
+    const tailwind = opt.tailwind === true || opt.shadcn === true;
+
+    await setupFoundation({ packageManager, tailwind, skipSkills });
 
     if (opt.shadcn) {
       await setupShadcn({ packageManager, skipSkills });
