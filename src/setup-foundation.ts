@@ -179,9 +179,11 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
   );
 
   if (await fileExists(".claude/settings.json")) {
-    logger.info("Configuring Codex hooks...");
+    logger.info("Configuring Codex and Grok Build hooks...");
     const hooksJson = await readTextFile(".claude/settings.json");
     await writeTextFile(".codex/hooks.json", hooksJson);
+    // Grok Build supports topic-specific hook files instead of one global file.
+    await writeTextFile(".grok/hooks/ultracite.json", hooksJson);
   }
 
   logger.info("Configuring Biome...");
