@@ -280,8 +280,10 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
   });
   await writeTextFile("AGENTS.md", agentsMd);
 
-  logger.info("Installing @felixarntz/biome...");
-  await exec(`${packageManager.devAddCommand} @felixarntz/biome`);
+  logger.info("Installing @felixarntz/biome and updating to TypeScript 7...");
+  await exec(
+    `${packageManager.devAddCommand} @felixarntz/biome typescript@^7.0.2`
+  );
 
   logger.info("Configuring @felixarntz/biome...");
   await updateBiomeConfigPlugins();
