@@ -18,6 +18,7 @@ import { exec } from "./utils/exec.js";
 import { getPackageManagerConfig } from "./utils/package-manager.js";
 
 interface PackageJson {
+  engines?: Record<string, string>;
   scripts?: Record<string, string>;
 }
 
@@ -123,7 +124,7 @@ async function configurePnpmBuildPolicy(): Promise<void> {
   await writeTextFile("pnpm-workspace.yaml", pnpmBuildPolicyContent);
 }
 
-async function updatePackageJsonScripts(): Promise<void> {
+async function updateGeneratedProjectConfig(): Promise<void> {
   const packageJsonRaw = await readTextFile("package.json");
   const packageJson = JSON.parse(packageJsonRaw) as PackageJson;
   const scripts = Object.create(null) as Record<string, string>;
@@ -140,11 +141,16 @@ async function updatePackageJsonScripts(): Promise<void> {
     doctor: "ultracite doctor",
     typecheck: "tsc --noEmit",
   };
+  packageJson.engines = {
+    ...packageJson.engines,
+    node: ">=22.18.0",
+  };
 
   await writeTextFile(
     "package.json",
     `${JSON.stringify(packageJson, null, 2)}\n`
   );
+  await writeTextFile(".nvmrc", "24\n");
 }
 
 async function updateBiomeConfigPlugins(): Promise<void> {
@@ -263,8 +269,8 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     }
   }
 
-  logger.info("Fixing package.json scripts...");
-  await updatePackageJsonScripts();
+  logger.info("Configuring package.json...");
+  await updateGeneratedProjectConfig();
 
   logger.info("Updating AGENTS.md...");
   let agentsMd = await readTextFile("AGENTS.md");

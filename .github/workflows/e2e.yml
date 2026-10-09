@@ -37,6 +37,7 @@ jobs:
           npx --yes "$GITHUB_WORKSPACE" . --shadcn --ai-sdk --ai-elements
           test -f pnpm-lock.yaml
           test ! -f bun.lock
+          grep -qx "24" .nvmrc
           grep -q "pnpm dev" AGENTS.md
           grep -q "pnpm dlx shadcn@latest add button" AGENTS.md
 
@@ -66,5 +67,6 @@ jobs:
           npx --yes "$GITHUB_WORKSPACE" . --bun --shadcn --ai-sdk --ai-elements
           test -f bun.lock
           test ! -f pnpm-lock.yaml
+          grep -qx "24" .nvmrc
           grep -q "bun dev" AGENTS.md
           grep -q "bunx --bun shadcn@latest add button" AGENTS.md
