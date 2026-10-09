@@ -70,7 +70,7 @@ withOptions(program, [
     // shadcn requires Tailwind CSS, so --shadcn implies Tailwind.
     const tailwind = opt.tailwind === true || opt.shadcn === true;
 
-    await setupFoundation({ packageManager, tailwind, skipSkills });
+    await setupFoundation({ packageManager, skipSkills, tailwind });
 
     if (opt.shadcn) {
       await setupShadcn({ packageManager, skipSkills });

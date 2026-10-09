@@ -29,29 +29,6 @@ export interface PackageManagerOptions {
 }
 
 const packageManagerConfigs = {
-  pnpm: {
-    addCommand: "pnpm add",
-    createNextAppCommand: "pnpm dlx create-next-app",
-    createNextAppFlag: "--use-pnpm",
-    devAddCommand: "pnpm add -D",
-    fixCommand: "pnpm fix",
-    name: "pnpm",
-    shadcnCommand: "pnpm dlx shadcn@latest",
-    skillsCommand: "pnpm dlx skills",
-    ultraciteCommand: "pnpm dlx ultracite",
-    workflowCommands: {
-      build: "pnpm build",
-      check: "pnpm check",
-      dev: "pnpm dev",
-      doctor: "pnpm doctor",
-      fix: "pnpm fix",
-      installPreference:
-        "In general, default to using PNPM for package scripts and dependency management.",
-      packageManager: "PNPM",
-      start: "pnpm start",
-      typecheck: "pnpm typecheck",
-    },
-  },
   bun: {
     addCommand: "bun add",
     createNextAppCommand: "bunx --bun create-next-app",
@@ -73,6 +50,29 @@ const packageManagerConfigs = {
       packageManager: "Bun",
       start: "bun start",
       typecheck: "bun typecheck",
+    },
+  },
+  pnpm: {
+    addCommand: "pnpm add",
+    createNextAppCommand: "pnpm dlx create-next-app",
+    createNextAppFlag: "--use-pnpm",
+    devAddCommand: "pnpm add -D",
+    fixCommand: "pnpm fix",
+    name: "pnpm",
+    shadcnCommand: "pnpm dlx shadcn@latest",
+    skillsCommand: "pnpm dlx skills",
+    ultraciteCommand: "pnpm dlx ultracite",
+    workflowCommands: {
+      build: "pnpm build",
+      check: "pnpm check",
+      dev: "pnpm dev",
+      doctor: "pnpm doctor",
+      fix: "pnpm fix",
+      installPreference:
+        "In general, default to using PNPM for package scripts and dependency management.",
+      packageManager: "PNPM",
+      start: "pnpm start",
+      typecheck: "pnpm typecheck",
     },
   },
 } as const satisfies Record<ProjectPackageManager, PackageManagerConfig>;
