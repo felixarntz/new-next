@@ -38,6 +38,10 @@ const packageManagerConfigs = {
     name: "bun",
     shadcnCommand: "bunx --bun shadcn@latest",
     skillsCommand: "bunx skills",
+    /*
+     * An explicit version range bypasses bunx's local binary lookup, preventing
+     * scaffolding from using this CLI's Ultracite development dependency.
+     */
     ultraciteCommand: "bunx --bun 'ultracite@*'",
     workflowCommands: {
       build: "bun run build",
