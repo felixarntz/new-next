@@ -9,7 +9,7 @@ CLI tool to scaffold opinionated Next.js projects with PNPM or Bun + Ultracite.
 - **Scaffold package manager:** Generated Next projects use PNPM by default. Passing `--bun` switches all scaffold-time setup commands and generated workflow guidance to Bun.
 - **Global cwd via `process.chdir`:** The optional `[directory]` positional arg calls `process.chdir()` early, so all relative paths (in `exec`, `readTextFile`, `writeTextFile`) resolve against the target project directory without threading a path parameter.
 - **Sequential steps:** Setup steps must run in order (foundation → shadcn → ai-sdk → ai-elements → cleanup) because later steps depend on files created by earlier ones.
-- **AGENTS.md as source of truth:** `ultracite init` generates `.claude/CLAUDE.md`. The foundation step moves it to `AGENTS.md` and symlinks `CLAUDE.md` → `AGENTS.md`. All subsequent steps prepend their guidelines before the `# Ultracite Code Standards` header.
+- **AGENTS.md as source of truth:** Ultracite 8+ generates `AGENTS.md` directly. The foundation step updates it in place. All subsequent steps prepend their guidelines before the `# Ultracite Code Standards` header.
 
 ## Workflow Commands
 
