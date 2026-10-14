@@ -38,7 +38,7 @@ const packageManagerConfigs = {
     name: "bun",
     shadcnCommand: "bunx --bun shadcn@latest",
     skillsCommand: "bunx skills",
-    ultraciteCommand: "bunx --bun ultracite",
+    ultraciteCommand: "bunx --bun 'ultracite@*'",
     workflowCommands: {
       build: "bun run build",
       check: "bun check",
