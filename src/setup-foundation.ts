@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { rm, stat, symlink, unlink } from "node:fs/promises";
+import { rm, stat, unlink } from "node:fs/promises";
 import {
   fileExists,
   logger,
@@ -238,16 +238,6 @@ export async function setupFoundation(opts: SetupOptions): Promise<void> {
     // Next.js may scaffold this as "@AGENTS.md", but we don't want that.
     await unlink("CLAUDE.md");
   }
-  const ultraciteMd = await readTextFile(".claude/CLAUDE.md");
-  if (await fileExists("AGENTS.md")) {
-    let existingAgentsMd = await readTextFile("AGENTS.md");
-    existingAgentsMd = `${existingAgentsMd.trimEnd()}\n\n${ultraciteMd}`;
-    await writeTextFile("AGENTS.md", existingAgentsMd);
-  } else {
-    await writeTextFile("AGENTS.md", ultraciteMd);
-  }
-  await symlink("AGENTS.md", "CLAUDE.md");
-  await unlink(".claude/CLAUDE.md");
 
   logger.info("Fixing pre-commit setup...");
   const huskyDirPath = ".husky/_";
